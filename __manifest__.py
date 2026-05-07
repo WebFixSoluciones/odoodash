@@ -1,6 +1,6 @@
 {
     'name': 'Dashboard de Aplicaciones Odoo Community',
-    'version': '1.0',
+    'version': '19.0.1.0.0',
     'category': 'Extra Tools',
     'summary': 'Añade el Dashboard visual de aplicaciones (Home) y lo pone por defecto',
     'description': """

@@ -84,7 +84,8 @@
     }
 }
 
-/* Ocultar elementos de la barra superior u otros menús en el home (opcional) */
+/* Ajuste del contenedor para ocupar el área correcta bajo el navbar de Odoo */
 .o_action_manager > .o_home_menu_background {
-    margin-top: -46px; /* Ajuste para el navbar en Odoo si es necesario */
+    /* Usar variable CSS de Odoo si existe, sino usar 0 para evitar saltos de layout */
+    margin-top: calc(-1 * var(--o-navbar-height, 0px));
 }

@@ -14,11 +14,14 @@ export class AppDashboard extends Component {
 
         onWillStart(async () => {
             const rawApps = this.menuService.getApps();
-            // Pre-procesamos las URLs de los íconos en JS para evitar errores en XML
+            // Pre-procesamos las URLs de los íconos — soporta PNG y SVG
             this.state.apps = rawApps.map(app => {
                 let iconUrl = "/base/static/description/icon.png";
                 if (app.webIconData) {
-                    iconUrl = "data:image/png;base64," + app.webIconData;
+                    // Detectar MIME type real (PNG o SVG) — Odoo 19 usa ambos
+                    const isSvg = app.webIconData.startsWith('PHN') || app.webIconData.startsWith('<');
+                    const mimeType = isSvg ? "image/svg+xml" : "image/png";
+                    iconUrl = `data:${mimeType};base64,` + app.webIconData;
                 } else if (typeof app.webIcon === 'string') {
                     const parts = app.webIcon.split(',');
                     if (parts.length === 2) {
@@ -33,7 +36,13 @@ export class AppDashboard extends Component {
     }
 
     openApp(app) {
-        this.menuService.selectMenu(app);
+        // Usar actionService si la app tiene una acción directa (más robusto)
+        // Fallback a menuService.selectMenu para compatibilidad completa
+        if (app.actionID) {
+            this.actionService.doAction(app.actionID);
+        } else {
+            this.menuService.selectMenu(app);
+        }
     }
 }
 
