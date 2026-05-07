@@ -7,7 +7,7 @@
         Este módulo crea un Dashboard visual de aplicaciones (similar a la versión Enterprise)
         y redirige a todos los usuarios a él después de iniciar sesión.
     """,
-    'author': 'Carlos TelecomTV',
+    'author': 'Ander Ur Dev - Web Fix',
     'depends': ['web'],
     'data': [
         'views/dashboard_action.xml',

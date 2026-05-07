@@ -3,8 +3,12 @@
     <t t-name="odoodash.AppDashboard" owl="1">
         <div class="o_home_menu_background">
             <div class="o_home_menu">
+                <div class="o_search_container">
+                    <input type="text" placeholder="Buscar aplicación..." 
+                           t-model="state.searchQuery" class="o_search_input"/>
+                </div>
                 <div class="o_apps">
-                    <t t-foreach="state.apps" t-as="app" t-key="app.id">
+                    <t t-foreach="filteredApps" t-as="app" t-key="app.id">
                         <a role="menuitem" t-on-click="() => this.openApp(app)" class="o_app o_menuitem">
                             <div class="o_app_icon_wrapper">
                                 <img t-att-src="app.iconUrl" class="o_app_icon" t-att-alt="app.name"/>

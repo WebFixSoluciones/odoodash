@@ -10,6 +10,7 @@ export class AppDashboard extends Component {
         this.actionService = useService("action");
         this.state = useState({
             apps: [],
+            searchQuery: "",
         });
 
         onWillStart(async () => {
@@ -33,6 +34,16 @@ export class AppDashboard extends Component {
                 return Object.assign({}, app, { iconUrl: iconUrl });
             });
         });
+    }
+
+    get filteredApps() {
+        if (!this.state.searchQuery) {
+            return this.state.apps;
+        }
+        const lowerCaseQuery = this.state.searchQuery.toLowerCase();
+        return this.state.apps.filter(app => 
+            app.name.toLowerCase().includes(lowerCaseQuery)
+        );
     }
 
     openApp(app) {

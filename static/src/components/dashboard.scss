@@ -1,3 +1,8 @@
+@keyframes appFadeIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .o_home_menu_background {
     position: absolute;
     top: 0;
@@ -12,12 +17,64 @@
     justify-content: center;
     align-items: flex-start;
 
+    @media (prefers-color-scheme: light) {
+        background: linear-gradient(135deg, #f0f4ff, #e8ecf8);
+        .o_caption { 
+            color: #1f2937 !important; 
+            text-shadow: none !important; 
+        }
+    }
+
     .o_home_menu {
         max-width: 1200px;
         width: 100%;
         padding: 40px;
         z-index: 1;
         margin-top: 5vh;
+
+        .o_search_container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+
+            .o_search_input {
+                width: 100%;
+                max-width: 500px;
+                padding: 12px 24px;
+                font-size: 16px;
+                border-radius: 30px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                backdrop-filter: blur(10px);
+                outline: none;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+                &::placeholder {
+                    color: rgba(255, 255, 255, 0.6);
+                }
+
+                &:focus {
+                    background: rgba(255, 255, 255, 0.2);
+                    border-color: rgba(255, 255, 255, 0.4);
+                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+                }
+
+                @media (prefers-color-scheme: light) {
+                    background: rgba(255, 255, 255, 0.8);
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    color: #1f2937;
+                    &::placeholder {
+                        color: rgba(0, 0, 0, 0.4);
+                    }
+                    &:focus {
+                        background: white;
+                        border-color: rgba(0, 0, 0, 0.2);
+                    }
+                }
+            }
+        }
 
         .o_apps {
             display: grid;
@@ -33,6 +90,11 @@
                 cursor: pointer;
                 transition: transform 0.2s ease-in-out;
                 width: 100px;
+                animation: appFadeIn 0.35s ease both;
+
+                @for $i from 1 through 30 {
+                    &:nth-child(#{$i}) { animation-delay: #{$i * 40}ms; }
+                }
 
                 &:hover {
                     transform: translateY(-5px) scale(1.05);
