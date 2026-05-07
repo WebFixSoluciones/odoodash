@@ -21,7 +21,9 @@ export class AppDashboard extends Component {
                     iconUrl = "data:image/png;base64," + app.webIconData;
                 } else if (typeof app.webIcon === 'string') {
                     const parts = app.webIcon.split(',');
-                    if (parts.length > 0) {
+                    if (parts.length === 2) {
+                        iconUrl = "/" + parts[0] + "/" + parts[1];
+                    } else if (parts.length > 0) {
                         iconUrl = "/" + parts[0] + "/static/description/icon.png";
                     }
                 }
