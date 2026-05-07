@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Esta acción del cliente lanza nuestro componente OWL -->
+        <record id="action_app_dashboard" model="ir.actions.client">
+            <field name="name">Apps Dashboard</field>
+            <field name="tag">odoodash.app_dashboard</field>
+            <field name="target">main</field>
+        </record>
+    </data>
+</odoo>

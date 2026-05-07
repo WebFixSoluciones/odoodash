@@ -1,18 +1,26 @@
 {
-    'name': 'Dashboard por defecto al iniciar sesión',
+    'name': 'Dashboard de Aplicaciones Odoo Community',
     'version': '1.0',
     'category': 'Extra Tools',
-    'summary': 'Todos los usuarios aterrizan en el panel de aplicaciones (Home)',
+    'summary': 'Añade el Dashboard visual de aplicaciones (Home) y lo pone por defecto',
     'description': """
-        Al instalar este módulo, cualquier usuario (nuevo o existente)
-        verá el Dashboard de aplicaciones justo después de iniciar sesión,
-        en lugar del chat de Discuss.
+        Este módulo crea un Dashboard visual de aplicaciones (similar a la versión Enterprise)
+        y redirige a todos los usuarios a él después de iniciar sesión.
     """,
     'author': 'Carlos TelecomTV',
     'depends': ['web'],
-    'data': [],
+    'data': [
+        'views/dashboard_action.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'odoodash/static/src/components/dashboard.js',
+            'odoodash/static/src/components/dashboard.xml',
+            'odoodash/static/src/components/dashboard.scss',
+        ],
+    },
     'installable': True,
-    'application': False,
+    'application': True,
     'auto_install': False,
     'post_init_hook': 'set_default_action_home',
 }
