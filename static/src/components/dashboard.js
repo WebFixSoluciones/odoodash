@@ -13,18 +13,28 @@ export class AppDashboard extends Component {
         });
 
         onWillStart(async () => {
-            // Obtenemos todas las aplicaciones instaladas a las que tiene acceso el usuario
-            this.state.apps = this.menuService.getApps();
+            const rawApps = this.menuService.getApps();
+            // Pre-procesamos las URLs de los íconos en JS para evitar errores en XML
+            this.state.apps = rawApps.map(app => {
+                let iconUrl = "/base/static/description/icon.png";
+                if (app.webIconData) {
+                    iconUrl = "data:image/png;base64," + app.webIconData;
+                } else if (typeof app.webIcon === 'string') {
+                    const parts = app.webIcon.split(',');
+                    if (parts.length > 0) {
+                        iconUrl = "/" + parts[0] + "/static/description/icon.png";
+                    }
+                }
+                return Object.assign({}, app, { iconUrl: iconUrl });
+            });
         });
     }
 
     openApp(app) {
-        // Redirigir a la app seleccionada usando el menuService nativo de Odoo
         this.menuService.selectMenu(app);
     }
 }
 
 AppDashboard.template = "odoodash.AppDashboard";
 
-// Registramos el componente en el registry de "actions" de Odoo
 registry.category("actions").add("odoodash.app_dashboard", AppDashboard);

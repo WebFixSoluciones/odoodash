@@ -5,12 +5,9 @@
             <div class="o_home_menu">
                 <div class="o_apps">
                     <t t-foreach="state.apps" t-as="app" t-key="app.id">
-                        <a role="menuitem" t-on-click.prevent="() => this.openApp(app)" class="o_app o_menuitem" t-att-data-menu-xmlid="app.xmlid">
+                        <a role="menuitem" t-on-click="() => this.openApp(app)" class="o_app o_menuitem">
                             <div class="o_app_icon_wrapper">
-                                <!-- Manejar webIcon (ruta) o webIconData (base64) -->
-                                <img t-if="app.webIconData" t-attf-src="data:image/png;base64,{{app.webIconData}}" class="o_app_icon" t-att-alt="app.name"/>
-                                <img t-elif="app.webIcon" t-attf-src="/{{app.webIcon.split(',')[0]}}/static/description/icon.png" class="o_app_icon" t-att-alt="app.name" t-on-error="() => app.webIcon = false"/>
-                                <img t-else="" src="/base/static/description/icon.png" class="o_app_icon" t-att-alt="app.name"/>
+                                <img t-att-src="app.iconUrl" class="o_app_icon" t-att-alt="app.name"/>
                             </div>
                             <div class="o_caption" t-esc="app.name"/>
                         </a>
