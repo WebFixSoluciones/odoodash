@@ -12,7 +12,6 @@
         <menuitem id="menu_app_dashboard_root"
                   name="Inicio"
                   action="action_app_dashboard"
-                  sequence="1"
-                  web_icon="odoodash,static/description/icon.png"/>
+                  sequence="1"/>
     </data>
 </odoo>

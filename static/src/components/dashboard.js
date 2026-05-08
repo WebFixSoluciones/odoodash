@@ -41,7 +41,7 @@ export class AppDashboard extends Component {
             return this.state.apps;
         }
         const lowerCaseQuery = this.state.searchQuery.toLowerCase();
-        return this.state.apps.filter(app => 
+        return this.state.apps.filter(app =>
             app.name.toLowerCase().includes(lowerCaseQuery)
         );
     }
