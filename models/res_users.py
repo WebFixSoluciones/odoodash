@@ -19,12 +19,11 @@ class ResUsers(models.Model):
             return False
 
 
-def set_default_action_home(cr, registry):
+def set_default_action_home(env):
     """Post-install hook: asigna la acción Home a todos los usuarios humanos existentes
     que no tengan una acción de inicio configurada.
     Excluye: usuarios portal (share=True), usuarios inactivos, y OdooBot/sistema.
     """
-    env = api.Environment(cr, SUPERUSER_ID, {})
     home_action = env.ref('odoodash.action_app_dashboard', raise_if_not_found=False)
     if not home_action:
         _logger.warning('odoodash: no se encontró action_app_dashboard, hook cancelado.')
