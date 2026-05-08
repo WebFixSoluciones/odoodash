@@ -7,5 +7,12 @@
             <field name="tag">odoodash.app_dashboard</field>
             <field name="target">main</field>
         </record>
+
+        <!-- Menú principal para acceder al dashboard en cualquier momento sin cerrar sesión -->
+        <menuitem id="menu_app_dashboard_root"
+                  name="Inicio"
+                  action="action_app_dashboard"
+                  sequence="1"
+                  web_icon="odoodash,static/description/icon.png"/>
     </data>
 </odoo>
