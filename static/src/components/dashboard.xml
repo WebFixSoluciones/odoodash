@@ -3,16 +3,42 @@
     <t t-name="odoodash.AppDashboard" owl="1">
         <div class="o_home_menu_background">
             <div class="o_home_menu">
+                <!-- Barra de Cabecera Superior (Estilo ERP General) -->
+                <div class="o_home_menu_top_bar">
+                    <div class="o_top_bar_left">
+                        <i class="fa fa-bars o_top_bar_menu_icon"/>
+                        <div class="o_top_bar_grid_wrapper">
+                            <i class="fa fa-th"/>
+                        </div>
+                        <div class="o_top_bar_title_block">
+                            <h1 class="o_top_bar_title">Dashboard General ERP</h1>
+                            <p class="o_top_bar_subtitle">Control holístico de proyectos, inventario, ventas y cumplimiento tributario SRI</p>
+                        </div>
+                    </div>
+                    <div class="o_top_bar_right">
+                        <button class="o_top_bar_btn o_btn_pos" t-on-click="openPosApp">
+                            <i class="fa fa-shopping-cart"/> POS
+                        </button>
+                        <button class="o_top_bar_btn o_btn_ai">
+                            <i class="fa fa-magic"/> ASISTENTE AI
+                        </button>
+                        <span class="o_top_bar_badge o_badge_sync">
+                            <span class="o_badge_dot"/> SINCRONIZADO
+                        </span>
+                        <i class="fa fa-cog o_top_bar_icon"/>
+                        <i class="fa fa-sun-o o_top_bar_icon"/>
+                    </div>
+                </div>
+
                 <div class="o_search_container">
                     <input type="text" placeholder="Buscar aplicación..." 
                            t-model="state.searchQuery" class="o_search_input"/>
                 </div>
-                <div class="o_home_menu_header">
-                    <h2>ACCESOS RÁPIDOS</h2>
-                </div>
+
+                <!-- Grid de Aplicaciones -->
                 <div class="o_apps">
                     <t t-foreach="filteredApps" t-as="app" t-key="app.id">
-                        <a role="menuitem" t-on-click="() => this.openApp(app)" class="o_app o_menuitem">
+                        <a role="menuitem" t-on-click="() => this.openApp(app)" class="o_app o_menuitem" t-att-style="app.styleStr">
                             <div class="o_app_icon_wrapper">
                                 <img t-att-src="app.iconUrl" class="o_app_icon" t-att-alt="app.name" t-on-error="(ev) => this.handleIconError(ev, app)"/>
                             </div>
