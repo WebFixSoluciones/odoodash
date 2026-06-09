@@ -11,7 +11,7 @@
                     <t t-foreach="filteredApps" t-as="app" t-key="app.id">
                         <a role="menuitem" t-on-click="() => this.openApp(app)" class="o_app o_menuitem">
                             <div class="o_app_icon_wrapper">
-                                <img t-att-src="app.iconUrl" class="o_app_icon" t-att-alt="app.name"/>
+                                <img t-att-src="app.iconUrl" class="o_app_icon" t-att-alt="app.name" t-on-error="(ev) => this.handleIconError(ev, app)"/>
                             </div>
                             <div class="o_caption" t-esc="app.name"/>
                         </a>
