@@ -95,7 +95,6 @@ const getColorByName = (name) => {
 };
 
 const generateSvgIcon = (pathSvg, strokeColor) => {
-    // Genera un SVG transparente con trazado blanco muy fino y elegante (stroke-width: 1.5)
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
         <g fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(20, 20) scale(2.5)">
             ${pathSvg}
@@ -119,6 +118,11 @@ export class AppDashboard extends Component {
         this.state = useState({
             apps: [],
             searchQuery: "",
+            companyName: "Odoo",
+            userName: "Usuario",
+            userInitial: "U",
+            avatarUrl: "",
+            isDebugMode: false,
         });
 
         onWillStart(async () => {
@@ -128,6 +132,18 @@ export class AppDashboard extends Component {
             const path = window.location.pathname;
             const parts = path.split('/');
             const prefix = (parts.length > 2 && parts[1] && parts[1] !== 'web') ? '/' + parts[1] : '';
+
+            // Cargar datos reales de la sesión Odoo
+            const sessionInfo = window.odoo.session_info || {};
+            this.state.companyName = sessionInfo.company_name || 
+                (sessionInfo.user_companies && sessionInfo.user_companies.current_company && sessionInfo.user_companies.current_company.name) || 
+                "Odoo";
+            this.state.userName = sessionInfo.name || "Usuario";
+            this.state.userInitial = this.state.userName.charAt(0).toUpperCase();
+            
+            const partnerId = sessionInfo.partner_id;
+            this.state.avatarUrl = partnerId ? `${prefix}/web/image?model=res.partner&field=avatar_128&id=${partnerId}` : '';
+            this.state.isDebugMode = window.odoo.debug !== "";
 
             this.state.apps = rawApps.map(app => {
                 const nameKey = app.name.toLowerCase().trim();
@@ -188,15 +204,23 @@ export class AppDashboard extends Component {
         }
     }
 
-    openPosApp() {
-        // Busca y abre la aplicación Punto de Venta directamente
-        const posApp = this.state.apps.find(app => 
-            app.name.toLowerCase().includes("punto de venta") || 
-            app.name.toLowerCase().includes("pos")
-        );
-        if (posApp) {
-            this.openApp(posApp);
+    openDiscuss() {
+        this.actionService.doAction("mail.action_discuss");
+    }
+
+    toggleDebug() {
+        const url = new URL(window.location.href);
+        const currentDebug = url.searchParams.get("debug");
+        if (currentDebug !== null) {
+            url.searchParams.delete("debug");
+        } else {
+            url.searchParams.set("debug", "1");
         }
+        window.location.href = url.toString();
+    }
+
+    openPreferences() {
+        this.actionService.doAction("base.action_res_users_my");
     }
 
     getFilteredApps() {

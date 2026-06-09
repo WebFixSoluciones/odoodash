@@ -3,30 +3,37 @@
     <t t-name="odoodash.AppDashboard" owl="1">
         <div class="o_home_menu_background">
             <div class="o_home_menu">
-                <!-- Barra de Cabecera Superior (Estilo ERP General) -->
+                <!-- Barra de Navegación Estilo Odoo Enterprise -->
                 <div class="o_home_menu_top_bar">
-                    <div class="o_top_bar_left">
-                        <i class="fa fa-bars o_top_bar_menu_icon"/>
-                        <div class="o_top_bar_grid_wrapper">
-                            <i class="fa fa-th"/>
+                    <div class="o_top_bar_right_enterprise">
+                        <!-- Botón de Chat (Conversaciones) -->
+                        <div class="o_top_bar_item o_chat_button" t-on-click="openDiscuss">
+                            <i class="fa fa-comments"/>
+                            <span class="o_badge_count">3</span>
                         </div>
-                        <div class="o_top_bar_title_block">
-                            <h1 class="o_top_bar_title">Dashboard General ERP</h1>
-                            <p class="o_top_bar_subtitle">Control holístico de proyectos, inventario, ventas y cumplimiento tributario SRI</p>
+                        
+                        <!-- Botón de Actividades -->
+                        <div class="o_top_bar_item o_activity_button" t-on-click="openDiscuss">
+                            <i class="fa fa-clock-o"/>
+                            <span class="o_badge_count">1</span>
                         </div>
-                    </div>
-                    <div class="o_top_bar_right">
-                        <button class="o_top_bar_btn o_btn_pos" t-on-click="openPosApp">
-                            <i class="fa fa-shopping-cart"/> POS
-                        </button>
-                        <button class="o_top_bar_btn o_btn_ai">
-                            <i class="fa fa-magic"/> ASISTENTE AI
-                        </button>
-                        <span class="o_top_bar_badge o_badge_sync">
-                            <span class="o_badge_dot"/> SINCRONIZADO
-                        </span>
-                        <i class="fa fa-cog o_top_bar_icon"/>
-                        <i class="fa fa-sun-o o_top_bar_icon"/>
+                        
+                        <!-- Icono de Desarrollador (Debug Mode) -->
+                        <div class="o_top_bar_item o_debug_button" t-on-click="toggleDebug" t-att-class="{ 'o_debug_active': state.isDebugMode }">
+                            <i class="fa fa-wrench"/>
+                        </div>
+
+                        <!-- Nombre de la Empresa Activa -->
+                        <span class="o_enterprise_company_name" t-esc="state.companyName"/>
+
+                        <!-- Avatar del Usuario (Inicial o imagen) -->
+                        <div class="o_enterprise_user_avatar" t-on-click="openPreferences">
+                            <t t-if="state.avatarUrl">
+                                <img t-att-src="state.avatarUrl" class="o_avatar_img" t-on-error="(ev) => ev.target.style.display = 'none'"/>
+                            </t>
+                            <span class="o_avatar_initial" t-esc="state.userInitial"/>
+                            <span class="o_avatar_status_dot"/>
+                        </div>
                     </div>
                 </div>
 
