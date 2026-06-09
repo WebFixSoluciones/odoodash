@@ -1,5 +1,5 @@
 @keyframes appFadeIn {
-    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
@@ -9,7 +9,7 @@
     left: 0;
     width: 100%;
     min-height: 100%;
-    background: linear-gradient(135deg, #1f2937, #111827); /* Fondo oscuro moderno */
+    background: linear-gradient(135deg, #0f172a, #020617); /* Fondo ultra oscuro y premium */
     background-size: cover;
     z-index: 0;
     overflow-y: auto;
@@ -18,9 +18,9 @@
     align-items: flex-start;
 
     @media (prefers-color-scheme: light) {
-        background: linear-gradient(135deg, #f0f4ff, #e8ecf8);
+        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
         .o_caption { 
-            color: #1f2937 !important; 
+            color: #334155 !important; 
             text-shadow: none !important; 
         }
     }
@@ -35,52 +35,72 @@
         .o_search_container {
             display: flex;
             justify-content: center;
-            margin-bottom: 40px;
+            margin-bottom: 48px;
 
             .o_search_input {
                 width: 100%;
                 max-width: 500px;
-                padding: 12px 24px;
+                padding: 14px 28px;
                 font-size: 16px;
                 border-radius: 30px;
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                background: rgba(255, 255, 255, 0.05);
                 color: white;
-                backdrop-filter: blur(10px);
+                backdrop-filter: blur(12px);
                 outline: none;
                 transition: all 0.3s ease;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
                 &::placeholder {
-                    color: rgba(255, 255, 255, 0.6);
+                    color: rgba(255, 255, 255, 0.4);
                 }
 
                 &:focus {
-                    background: rgba(255, 255, 255, 0.2);
-                    border-color: rgba(255, 255, 255, 0.4);
-                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+                    background: rgba(255, 255, 255, 0.08);
+                    border-color: rgba(255, 255, 255, 0.2);
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
                 }
 
                 @media (prefers-color-scheme: light) {
-                    background: rgba(255, 255, 255, 0.8);
-                    border: 1px solid rgba(0, 0, 0, 0.1);
-                    color: #1f2937;
+                    background: rgba(255, 255, 255, 0.95);
+                    border: 1px solid rgba(0, 0, 0, 0.08);
+                    color: #0f172a;
                     &::placeholder {
                         color: rgba(0, 0, 0, 0.4);
                     }
                     &:focus {
                         background: white;
-                        border-color: rgba(0, 0, 0, 0.2);
+                        border-color: rgba(0, 0, 0, 0.15);
                     }
+                }
+            }
+        }
+
+        .o_home_menu_header {
+            width: 100%;
+            margin-bottom: 24px;
+            padding-left: 4px;
+            text-align: left;
+
+            h2 {
+                font-size: 13px;
+                font-weight: 700;
+                color: #64748b;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                margin: 0;
+
+                @media (prefers-color-scheme: light) {
+                    color: #475569;
                 }
             }
         }
 
         .o_apps {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 40px 20px;
-            justify-items: center;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 24px;
+            width: 100%;
 
             .o_app {
                 display: flex;
@@ -88,58 +108,84 @@
                 align-items: center;
                 text-decoration: none;
                 cursor: pointer;
-                transition: transform 0.2s ease-in-out;
-                width: 100px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                padding: 24px 16px;
+                border-radius: 20px;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(8px);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 animation: appFadeIn 0.35s ease both;
 
                 @for $i from 1 through 30 {
-                    &:nth-child(#{$i}) { animation-delay: #{$i * 40}ms; }
+                    &:nth-child(#{$i}) { animation-delay: #{$i * 30}ms; }
                 }
 
                 &:hover {
-                    transform: translateY(-5px) scale(1.05);
+                    transform: translateY(-4px);
+                    background: rgba(255, 255, 255, 0.07);
+                    border-color: rgba(255, 255, 255, 0.1);
+                    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+
+                    .o_app_icon_wrapper {
+                        transform: scale(1.05);
+                        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+                    }
 
                     .o_caption {
-                        text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
-                        opacity: 1;
+                        color: white;
                     }
-                    
-                    .o_app_icon_wrapper {
-                        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+                }
+
+                @media (prefers-color-scheme: light) {
+                    background: white;
+                    border: 1px solid rgba(0, 0, 0, 0.03);
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+
+                    &:hover {
+                        background: #fdfdfd;
+                        border-color: rgba(0, 0, 0, 0.06);
+                        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
                     }
                 }
 
                 .o_app_icon_wrapper {
-                    width: 80px;
-                    height: 80px;
+                    width: 72px;
+                    height: 72px;
                     border-radius: 18px;
-                    overflow: hidden;
-                    background-color: white;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    transition: box-shadow 0.2s;
-                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+                    border: 1px solid rgba(255, 255, 255, 0.10);
+                    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+
+                    @media (prefers-color-scheme: light) {
+                        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+                        border: 1px solid rgba(0, 0, 0, 0.05);
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+                    }
 
                     .o_app_icon {
-                        width: 100%;
-                        height: 100%;
+                        width: 42px;
+                        height: 42px;
                         object-fit: contain;
                     }
                 }
 
                 .o_caption {
-                    margin-top: 12px;
-                    color: white;
+                    margin-top: 14px;
+                    color: rgba(255, 255, 255, 0.8);
                     font-size: 14px;
-                    font-weight: 500;
+                    font-weight: 600;
                     text-align: center;
-                    text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.8);
-                    opacity: 0.9;
+                    transition: color 0.2s;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     max-width: 100%;
+                    text-shadow: none;
                 }
             }
         }
@@ -148,6 +194,5 @@
 
 /* Ajuste del contenedor para ocupar el área correcta bajo el navbar de Odoo */
 .o_action_manager > .o_home_menu_background {
-    /* Usar variable CSS de Odoo si existe, sino usar 0 para evitar saltos de layout */
     margin-top: calc(-1 * var(--o-navbar-height, 0px));
 }

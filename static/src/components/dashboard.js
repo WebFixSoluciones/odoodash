@@ -4,178 +4,162 @@ import { Component, useState, onWillStart } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
-// Paleta de gradientes y paths SVG vectoriales premium inspirados en Odoo Enterprise / JS Moderno
+// Colores de trazado dedicados para mantener una identidad de color única por app (estilo Lucide / Modern JS)
 const SVG_ICONS = {
     inicio: {
         path: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
-        colors: ["#8B5CF6", "#EC4899"] // Purple-Pink
+        color: "#8B5CF6" // Violeta
     },
     conversaciones: {
         path: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
-        colors: ["#3B82F6", "#06B6D4"] // Blue-Cyan
+        color: "#0EA5E9" // Celeste
     },
     discuss: {
         path: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
-        colors: ["#3B82F6", "#06B6D4"]
+        color: "#0EA5E9"
     },
     tableros: {
         path: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="9" y1="9" x2="21" y2="9"/><line x1="9" y1="15" x2="21" y2="15"/>',
-        colors: ["#6366F1", "#8B5CF6"] // Indigo-Purple
+        color: "#6366F1" // Indigo
     },
     dashboards: {
         path: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="9" y1="9" x2="21" y2="9"/><line x1="9" y1="15" x2="21" y2="15"/>',
-        colors: ["#6366F1", "#8B5CF6"]
+        color: "#6366F1"
     },
     "punto de venta": {
-        path: '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M17 9h.01M7 9h10v4H7z"/>',
-        colors: ["#10B981", "#14B8A6"] // Green-Teal
+        path: '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>',
+        color: "#10B981" // Esmeralda / Verde
     },
     pos: {
-        path: '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M17 9h.01M7 9h10v4H7z"/>',
-        colors: ["#10B981", "#14B8A6"]
+        path: '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>',
+        color: "#10B981"
     },
     facturación: {
         path: '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
-        colors: ["#F59E0B", "#EF4444"] // Amber-Red
+        color: "#F59E0B" // Naranja/Ambar
     },
     facturacion: {
         path: '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
-        colors: ["#F59E0B", "#EF4444"]
+        color: "#F59E0B"
     },
     invoicing: {
         path: '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
-        colors: ["#F59E0B", "#EF4444"]
+        color: "#F59E0B"
     },
     inventario: {
         path: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
-        colors: ["#F97316", "#F59E0B"] // Orange-Amber
+        color: "#0284C7" // Azul / Sky
     },
     inventory: {
         path: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
-        colors: ["#F97316", "#F59E0B"]
+        color: "#0284C7"
     },
     aplicaciones: {
         path: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
-        colors: ["#4F46E5", "#7C3AED"] // Indigo-Violet
+        color: "#EC4899" // Rosado
     },
     apps: {
         path: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
-        colors: ["#4F46E5", "#7C3AED"]
+        color: "#EC4899"
     },
     ajustes: {
         path: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
-        colors: ["#64748B", "#475569"] // Slate
+        color: "#64748B" // Gris/Pizarra
     },
     settings: {
         path: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
-        colors: ["#64748B", "#475569"]
+        color: "#64748B"
     },
     ventas: {
-        path: '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>',
-        colors: ["#EC4899", "#F43F5E"] // Pink-Rose
+        path: '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>',
+        color: "#EF4444" // Rojo
     },
     sales: {
-        path: '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>',
-        colors: ["#EC4899", "#F43F5E"]
+        path: '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>',
+        color: "#EF4444"
     },
     crm: {
-        path: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
-        colors: ["#3B82F6", "#8B5CF6"] // Blue-Purple
+        path: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+        color: "#A855F7" // Morado
     },
     compras: {
         path: '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>',
-        colors: ["#14B8A6", "#059669"] // Teal-Green
+        color: "#14B8A6" // Turquoise
     },
     purchase: {
         path: '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>',
-        colors: ["#14B8A6", "#059669"]
+        color: "#14B8A6"
     },
     proyectos: {
         path: '<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
-        colors: ["#0EA5E9", "#2563EB"] // Sky-Blue
+        color: "#3B82F6"
     },
     project: {
         path: '<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
-        colors: ["#0EA5E9", "#2563EB"]
+        color: "#3B82F6"
     },
     contactos: {
         path: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-        colors: ["#06B6D4", "#3B82F6"] // Cyan-Blue
+        color: "#06B6D4" // Cyan
     },
     contacts: {
         path: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-        colors: ["#06B6D4", "#3B82F6"]
+        color: "#06B6D4"
     },
     calendario: {
         path: '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
-        colors: ["#EF4444", "#EC4899"] // Red-Pink
+        color: "#F43F5E" // Rosado fuerte
     },
     calendar: {
         path: '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
-        colors: ["#EF4444", "#EC4899"]
+        color: "#F43F5E"
     },
     empleados: {
         path: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 9.75"/>',
-        colors: ["#8B5CF6", "#6366F1"] // Purple-Indigo
+        color: "#8B5CF6"
     },
     employees: {
         path: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 9.75"/>',
-        colors: ["#8B5CF6", "#6366F1"]
+        color: "#8B5CF6"
     }
 };
 
-const getColorsByName = (name) => {
-    const gradients = [
-        ["#3B82F6", "#06B6D4"], // Blue-Cyan
-        ["#10B981", "#14B8A6"], // Green-Teal
-        ["#F59E0B", "#EF4444"], // Amber-Red
-        ["#8B5CF6", "#EC4899"], // Purple-Pink
-        ["#F97316", "#F59E0B"], // Orange-Amber
-        ["#6366F1", "#8B5CF6"], // Indigo-Purple
-        ["#EC4899", "#F43F5E"], // Pink-Rose
-    ];
+const STROKE_COLORS = [
+    "#3B82F6", // Blue
+    "#10B981", // Emerald
+    "#F59E0B", // Amber
+    "#EC4899", // Pink
+    "#8B5CF6", // Purple
+    "#EF4444", // Red
+    "#06B6D4", // Cyan
+    "#F97316", // Orange
+    "#6366F1", // Indigo
+];
+
+const getColorByName = (name) => {
     let hash = 0;
     const cleanName = name || "?";
     for (let i = 0; i < cleanName.length; i++) {
         hash = cleanName.charCodeAt(i) + ((hash << 5) - hash);
     }
-    const index = Math.abs(hash) % gradients.length;
-    return gradients[index];
+    const index = Math.abs(hash) % STROKE_COLORS.length;
+    return STROKE_COLORS[index];
 };
 
-const generateSvgIcon = (pathSvg, color1, color2) => {
+const generateSvgIcon = (pathSvg, strokeColor) => {
+    // Genera un SVG transparente con trazado contorneado interactivo
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
-        <defs>
-            <linearGradient id="grad-${color1.replace('#','')}" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:${color1};stop-opacity:1" />
-                <stop offset="100%" style="stop-color:${color2};stop-opacity:1" />
-            </linearGradient>
-            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.2"/>
-            </filter>
-        </defs>
-        <rect width="100" height="100" rx="22" fill="url(#grad-${color1.replace('#','')})"/>
-        <g fill="white" filter="url(#shadow)" transform="translate(25, 25) scale(2.08)">
+        <g fill="none" stroke="${strokeColor}" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(18, 18) scale(2.66)">
             ${pathSvg}
         </g>
     </svg>`;
     return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 };
 
-const generateLetterIcon = (name, color1, color2) => {
+const generateLetterIcon = (name, strokeColor) => {
     const letter = (name || "?").charAt(0).toUpperCase();
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
-        <defs>
-            <linearGradient id="grad-${color1.replace('#','')}" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:${color1};stop-opacity:1" />
-                <stop offset="100%" style="stop-color:${color2};stop-opacity:1" />
-            </linearGradient>
-            <filter id="text-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="4" stdDeviation="3" flood-opacity="0.25"/>
-            </filter>
-        </defs>
-        <rect width="100" height="100" rx="22" fill="url(#grad-${color1.replace('#','')})"/>
-        <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="white" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-weight="700" font-size="44" filter="url(#text-shadow)">${letter}</text>
+        <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="${strokeColor}" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-weight="700" font-size="52">${letter}</text>
     </svg>`;
     return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 };
@@ -204,7 +188,7 @@ export class AppDashboard extends Component {
                 // 1. Prioridad: Icono SVG estático premium para aplicaciones comunes
                 if (SVG_ICONS[nameKey]) {
                     const iconDef = SVG_ICONS[nameKey];
-                    iconUrl = generateSvgIcon(iconDef.path, iconDef.colors[0], iconDef.colors[1]);
+                    iconUrl = generateSvgIcon(iconDef.path, iconDef.color);
                 } else if (app.webIconData) {
                     // 2. Icono en Base64 propio de la app (ej: Enterprise o Custom bien cargado)
                     const isSvg = app.webIconData.startsWith('PHN') || app.webIconData.startsWith('<');
@@ -231,13 +215,13 @@ export class AppDashboard extends Component {
     }
 
     getFallbackIcon(app) {
-        const colors = getColorsByName(app.name);
+        const color = getColorByName(app.name);
         const nameKey = app.name.toLowerCase().trim();
         if (SVG_ICONS[nameKey]) {
             const iconDef = SVG_ICONS[nameKey];
-            return generateSvgIcon(iconDef.path, iconDef.colors[0], iconDef.colors[1]);
+            return generateSvgIcon(iconDef.path, iconDef.color);
         }
-        return generateLetterIcon(app.name, colors[0], colors[1]);
+        return generateLetterIcon(app.name, color);
     }
 
     handleIconError(ev, app) {
@@ -273,4 +257,3 @@ export class AppDashboard extends Component {
 AppDashboard.template = "odoodash.AppDashboard";
 
 registry.category("actions").add("odoodash.app_dashboard", AppDashboard);
-

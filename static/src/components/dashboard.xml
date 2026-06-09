@@ -7,6 +7,9 @@
                     <input type="text" placeholder="Buscar aplicación..." 
                            t-model="state.searchQuery" class="o_search_input"/>
                 </div>
+                <div class="o_home_menu_header">
+                    <h2>ACCESOS RÁPIDOS</h2>
+                </div>
                 <div class="o_apps">
                     <t t-foreach="filteredApps" t-as="app" t-key="app.id">
                         <a role="menuitem" t-on-click="() => this.openApp(app)" class="o_app o_menuitem">
