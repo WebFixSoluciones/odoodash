@@ -118,11 +118,6 @@ export class AppDashboard extends Component {
         this.state = useState({
             apps: [],
             searchQuery: "",
-            companyName: "Odoo",
-            userName: "Usuario",
-            userInitial: "U",
-            avatarUrl: "",
-            isDebugMode: false,
         });
 
         onWillStart(async () => {
@@ -133,50 +128,27 @@ export class AppDashboard extends Component {
             const parts = path.split('/');
             const prefix = (parts.length > 2 && parts[1] && parts[1] !== 'web') ? '/' + parts[1] : '';
 
-            // Cargar datos reales de la sesión Odoo
-            const sessionInfo = window.odoo.session_info || {};
-            this.state.companyName = sessionInfo.company_name || 
-                (sessionInfo.user_companies && sessionInfo.user_companies.current_company && sessionInfo.user_companies.current_company.name) || 
-                "Odoo";
-            this.state.userName = sessionInfo.name || "Usuario";
-            this.state.userInitial = this.state.userName.charAt(0).toUpperCase();
-            
-            const partnerId = sessionInfo.partner_id;
-            this.state.avatarUrl = partnerId ? `${prefix}/web/image?model=res.partner&field=avatar_128&id=${partnerId}` : '';
-            this.state.isDebugMode = window.odoo.debug !== "";
-
             this.state.apps = rawApps.map(app => {
                 const nameKey = app.name.toLowerCase().trim();
                 let iconUrl = "";
                 let themeColor = "#FFFFFF";
 
-                // Determinar el color de tema
+                // Determinar el color de tema e icono
                 if (SVG_ICONS[nameKey]) {
                     themeColor = SVG_ICONS[nameKey].color;
                     iconUrl = generateSvgIcon(SVG_ICONS[nameKey].path, themeColor);
-                } else {
+                } else if (app.webIconData) {
                     themeColor = getColorByName(app.name);
-                    if (app.webIconData) {
-                        const isSvg = app.webIconData.startsWith('PHN') || app.webIconData.startsWith('<');
-                        const mimeType = isSvg ? "image/svg+xml" : "image/png";
-                        iconUrl = `data:${mimeType};base64,` + app.webIconData;
-                    } else if (typeof app.webIcon === 'string') {
-                        const partsIcon = app.webIcon.split(',');
-                        if (partsIcon.length === 2) {
-                            iconUrl = `${prefix}/${partsIcon[0]}/${partsIcon[1]}`;
-                        } else if (partsIcon.length > 0) {
-                            iconUrl = `${prefix}/${partsIcon[0]}/static/description/icon.png`;
-                        }
-                    }
-                }
-
-                // Fallback default
-                if (!iconUrl) {
-                    iconUrl = `${prefix}/base/static/description/icon.png`;
+                    const isSvg = app.webIconData.startsWith('PHN') || app.webIconData.startsWith('<');
+                    const mimeType = isSvg ? "image/svg+xml" : "image/png";
+                    iconUrl = `data:${mimeType};base64,` + app.webIconData;
+                } else {
+                    // Si se instala un nuevo módulo, asignarle una letra directamente
+                    themeColor = getColorByName(app.name);
+                    iconUrl = generateLetterIcon(app.name, themeColor);
                 }
 
                 // Generar variables de estilo CSS en línea para degradados e iluminación por color
-                // Suffixes hex para opacidad: 26 = 15%, 08 = 3%, 40 = 25%, 12 = 7%
                 const styleStr = `--app-theme-color: ${themeColor}; --app-theme-color-bg1: ${themeColor}26; --app-theme-color-bg2: ${themeColor}08; --app-theme-color-border: ${themeColor}40; --app-theme-color-shadow: ${themeColor}12;`;
 
                 return Object.assign({}, app, { 
@@ -202,25 +174,6 @@ export class AppDashboard extends Component {
         if (ev.target.src !== fallbackUrl) {
             ev.target.setAttribute("src", fallbackUrl);
         }
-    }
-
-    openDiscuss() {
-        this.actionService.doAction("mail.action_discuss");
-    }
-
-    toggleDebug() {
-        const url = new URL(window.location.href);
-        const currentDebug = url.searchParams.get("debug");
-        if (currentDebug !== null) {
-            url.searchParams.delete("debug");
-        } else {
-            url.searchParams.set("debug", "1");
-        }
-        window.location.href = url.toString();
-    }
-
-    openPreferences() {
-        this.actionService.doAction("base.action_res_users_my");
     }
 
     getFilteredApps() {
